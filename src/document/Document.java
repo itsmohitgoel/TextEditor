@@ -53,9 +53,65 @@ public abstract class Document {
 		// TODO: Implement this method so that you can call it from the 
 	    // getNumSyllables method in BasicDocument (module 1) and 
 	    // EfficientDocument (module 2).
-	    return 0;
+		int count = 0;
+		word = word.toLowerCase();
+		
+		if(word.charAt(word.length() - 1) == 'e'){
+			// Word ending with character 'e'.
+			if(isESilent(word)){
+				// If 'e' silent, then truncate whole word by one character
+				// in the end eg(able, age, moose, wine etc).
+				word = word.substring(0, word.length()-1);
+				count += countAllSyllables(word);
+			}else{
+				// If 'e' is not silent,then simply increment syllable count by 1
+				// for whole word eg(the).
+				count ++;
+			}
+		}else{
+			// word doesn't end with character 'e'
+			count = countAllSyllables(word);
+		}
+	    return count;
 	}
 	
+	/**
+	 * Method to determine whether to count ending 'e' as syllable
+	 * or not , by looking for any vowel or 'y' , in prefix substring
+	 * of the given word.
+	 * @return value
+	 */
+	protected boolean isESilent(String word) {
+		word = word.substring(0, word.length()-1);
+		
+		Pattern regExpression = Pattern.compile("[yaeiou]");
+		Matcher matcher = regExpression.matcher(word);
+		
+		if(matcher.find()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	/**
+	 * Helper Method to count syllables in word irrespective 
+	 * of 'e' in end or not
+	 * 
+	 * @param word
+	 * @return count
+	 */
+	protected int countAllSyllables(String word) {
+		int count = 0;
+		Pattern regExpression = Pattern.compile("[yaeiou]+");
+		Matcher matcher = regExpression.matcher(word);
+		
+		while(matcher.find()){
+			++count;
+		}
+		return count;
+	}
+
 	/** A method for testing
 	 * 
 	 * @param doc The Document object to test

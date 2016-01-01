@@ -58,9 +58,12 @@ public class BasicDocument extends Document
 	@Override
 	public int getNumSyllables()
 	{
-	    //TODO: Implement this method.  See the Module 1 support videos 
-        // if you need help.
-        return 0;
+		int numOfSyllables = 0;
+		List<String> wordsList = getTokens("[a-zA-Z]+");
+		for (String word : wordsList) {
+			numOfSyllables += countSyllables(word);
+		}
+		return numOfSyllables;
 	}
 	
 	
