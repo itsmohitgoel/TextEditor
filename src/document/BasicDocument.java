@@ -87,8 +87,9 @@ public class BasicDocument extends Document
 		testCase(new BasicDocument("Sentences?!"), 3, 1, 1);
 		testCase(new BasicDocument("Lorem ipsum dolor sit amet, qui ex choro quodsi moderatius, nam dolores explicari forensibus ad."),
 		         32, 15, 1);
-		
-		
+		BasicDocument bs = new BasicDocument("This is a test.  How many???  "
+		        + "Senteeeeeeeeeences are here... there should be 5!  Right?");
+		System.out.println("Flesh  score : " + bs.getFleschScore() );
 	}
 	
 }

@@ -173,7 +173,13 @@ public abstract class Document {
 	public double getFleschScore()
 	{
 	    // TODO: Implement this method
-	    return 0.0;
+		int numWords = getNumWords();
+		int numSentences = getNumSentences();
+		int numSyllables = getNumSyllables();
+		
+		double fleshScore = 206.835 - ((1.015 * numWords) / numSentences)
+									- ((84.6 * numSyllables) / numWords);
+	    return fleshScore;
 	}
 	
 	
