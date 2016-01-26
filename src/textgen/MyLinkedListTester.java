@@ -157,6 +157,60 @@ public class MyLinkedListTester {
 	{
         // TODO: implement this test
 		
+		// Test empty list, first contents, then out of bounds
+		emptyList.add(0, 77);
+		assertEquals("check insertion to empty list", (Integer)77, emptyList.get(0));
+		
+		try {
+			emptyList.add(2, 88);
+			fail("check out of upper bounds");
+		} catch (IndexOutOfBoundsException ex) {
+			
+		}
+		
+		try {
+			emptyList.add(-1, 99);
+			fail("check out of lower bounds");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		
+		// Test short list, first contents , then out of bounds
+		shortList.add(1, "a");
+		assertEquals("check insertion in short list", "a", shortList.get(1));
+		
+		try {
+			shortList.add(10, "C");
+			fail("check out of upper bounds");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		
+		try {
+			shortList.add(-1, "D");
+			fail("check out of lower bounds");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		
+		// Test longer list, first contents, then out of bounds
+		longerList.add(5, 77);
+		longerList.add(8, 88);
+		assertEquals("check insertion in long list", (Integer)77, longerList.get(5));
+		assertEquals("check insertion in long list", (Integer)88, longerList.get(8));
+		
+		try {
+			longerList.add(13, 99);
+			fail("check out of upper bounds");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		
+		try {
+			longerList.add(-1, 100);
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
 	}
 	
 	/** Test setting an element in the list */
