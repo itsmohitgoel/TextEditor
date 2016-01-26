@@ -17,6 +17,12 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	/** Create a new empty LinkedList */
 	public MyLinkedList() {
 		// TODO: Implement this method
+		head = new LLNode();
+		tail = new LLNode();
+		head.next = tail;
+		tail.prev = head;
+		size = 0;
+		
 	}
 
 	/**
@@ -26,7 +32,27 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public boolean add(E element ) 
 	{
 		// TODO: Implement this method
-		return false;
+		LLNode newNode = new LLNode(element);
+		
+		// If list is empty, re-adjust pointers only.
+		if(size == 0){
+			newNode.next = head.next;
+			newNode.prev = head;
+			head.next = newNode;
+			tail.prev = newNode;
+			
+			++size;
+			return true;
+		}
+		
+		// If list is not empty
+		newNode.prev = tail.prev;
+		tail.prev.next = newNode;
+		tail.prev = newNode;
+		newNode.next = tail;
+		
+		++size;
+		return true;
 	}
 
 	/** Get the element at position index 
@@ -34,7 +60,16 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E get(int index) 
 	{
 		// TODO: Implement this method.
-		return null;
+		if(size == 0 || index < 0 || index >= size){
+			throw new IndexOutOfBoundsException("Check out of bounds or size");
+		}
+		LLNode traverseNode = head.next;
+		
+		for(int i = 0; i < index; i++){
+			traverseNode = traverseNode.next;
+		}
+			
+		return (E)traverseNode.data;
 	}
 
 	/**
@@ -97,4 +132,9 @@ class LLNode<E>
 		this.next = null;
 	}
 
+	public LLNode(){
+		this.data = null;
+		this.next = null;
+		this.prev = null;
+	}
 }
