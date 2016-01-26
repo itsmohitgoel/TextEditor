@@ -109,12 +109,56 @@ public class MyLinkedListTester {
 	@Test
 	public void testRemove()
 	{
-		/*int a = list1.remove(0);
+		int a = list1.remove(0);
 		assertEquals("Remove: check a is correct ", 65, a);
 		assertEquals("Remove: check element 0 is correct ", (Integer)21, list1.get(0));
-		assertEquals("Remove: check size is correct ", 2, list1.size());*/
+		assertEquals("Remove: check size is correct ", 2, list1.size());
 		
 		// TODO: Add more tests here
+		// Test empty list
+		try {
+			emptyList.remove(0);
+			fail("Remove: check empty list throws exception");
+		} catch (IndexOutOfBoundsException e) {
+		}
+		
+		// Test short list,
+		String b = shortList.remove(1);
+		assertEquals("Remove: check b is correct", "B", b);
+		assertEquals("Remove: check element 0 is correct", "A", shortList.get(0));
+		assertEquals("Remove: check size is corret", 1, shortList.size());
+		
+		// Test long list
+		int c = longerList.remove(5);
+		assertEquals("Remove: check c is correct", 5, c);
+		assertEquals("Remove: check element 5 is correct", (Integer)6, longerList.get(5));
+		assertEquals("Remove: check size is corret", 9, longerList.size());
+		
+		//Test corner cases
+		try {
+			shortList.remove(1);
+			fail("Remove: check short list corner case");
+		} catch (IndexOutOfBoundsException e) {
+			// TODO: handle exception
+		}
+		try {
+			shortList.remove(-1);
+			fail("Remove: check short list corner case");
+		} catch (IndexOutOfBoundsException e) {
+			// TODO: handle exception
+		}
+		try {
+			longerList.remove(9);
+			fail("Remove: check longer list corner case");
+		} catch (IndexOutOfBoundsException e) {
+			// TODO: handle exception
+		}
+		try {
+			longerList.remove(-1);
+			fail("Remove: check longer list corner case");
+		} catch (IndexOutOfBoundsException e) {
+			// TODO: handle exception
+		}
 	}
 	
 	/** Test adding an element into the end of the list, specifically
@@ -126,14 +170,20 @@ public class MyLinkedListTester {
         // TODO: implement this test
 		
 		// test empty list,
-		assertEquals("add to empty list",true, emptyList.add(5));
+		assertEquals("Add: check item is added to empty list",true, emptyList.add(5));
+		assertEquals("Add: check last element is oorrect",(Integer)5, emptyList.get(0));
+		assertEquals("Add: check size is correct ",1, emptyList.size());
 		
 		//test shorter list,
-		assertEquals("add to shorter list", true, shortList.add("C"));
+		assertEquals("Add: check item is added to shorter list", true, shortList.add("C"));
+		assertEquals("Add: check last element is correct", "C", shortList.get(2));
+		assertEquals("Add: check size is correct", 3, shortList.size());
 		
 		// test longer list,
 		for (int i = 10; i < 20; i++) {
-			assertEquals("add " + i + " element",true, longerList.add(i));
+			assertEquals("Add: check insertion of  " + i + " element",true, longerList.add(i));
+			assertEquals("Add: check last element is correct", (Integer)i, longerList.get(i));
+			assertEquals("Add: check size is correct", (i + 1), longerList.size());
 		}
 		
 	}
@@ -144,6 +194,15 @@ public class MyLinkedListTester {
 	public void testSize()
 	{
 		// TODO: implement this test
+		
+		//Test empty  list size.
+		assertEquals("check size", 0, emptyList.size());
+		
+		// Test short list size.
+		assertEquals("check size", 2, shortList.size());
+		
+		// Test long list size.
+		assertEquals("check size", 10, longerList.size());
 	}
 
 	
@@ -218,7 +277,78 @@ public class MyLinkedListTester {
 	public void testSet()
 	{
 	    // TODO: implement this test
-	    
+		
+		//Test empty list
+		try {
+			emptyList.set(0, 77);
+			fail("Set: Check bounds of empty list");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		try {
+			emptyList.set(0, null);
+			fail("Set: Check Null insertion to list");
+		} catch (NullPointerException e) {
+			
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		
+		//Test short list
+		String a = shortList.set(1, "C");
+		assertEquals("Set: check item a is correct", a, "B");
+		assertEquals("Set: check element 1 is correct", "C", shortList.get(1));
+		assertEquals("Set: check size is correct", 2, shortList.size());
+		
+		try {
+			shortList.set(2, "D");
+			fail("Set: Check uppper bounds of list");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		try {
+			shortList.set(-1, "D");
+			fail("Set: Check lower bounds of list");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		try {
+			shortList.set(1, null);
+			fail("Set: Check Null insertion to list");
+		} catch (NullPointerException e) {
+			
+		}
+		
+		//Test long list
+		Integer b = null;
+		for (int i = 0; i < LONG_LIST_LENGTH; i++) {
+			b = longerList.set(i, (i + LONG_LIST_LENGTH));
+			assertEquals("Set: check item b is correct", b, (Integer)i);
+			assertEquals("Set: check element " + i + " is correct", (Integer)(i + LONG_LIST_LENGTH), longerList.get(i));
+			assertEquals("Set: check size is correct", 10, longerList.size());
+			
+		}
+		
+		// Test corner cases
+		try {
+			longerList.set(10, 20);
+			fail("Set: Check uppper bounds of list");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		try {
+			longerList.set(-1, 30);
+			fail("Set: Check lower bounds of list");
+		} catch (IndexOutOfBoundsException e) {
+			
+		}
+		try {
+			longerList.set(4, null);
+			fail("Set: Check Null insertion to list");
+		} catch (NullPointerException e) {
+			
+		}
+		
 	}
 	
 	

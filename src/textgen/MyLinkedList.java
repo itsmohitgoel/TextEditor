@@ -80,6 +80,35 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public void add(int index, E element ) 
 	{
 		// TODO: Implement this method
+		if(index < 0 || index > size){
+			throw new IndexOutOfBoundsException("Check Upper or Lower bounds while inserting "
+					+ "element at particular index.");
+		}
+		
+		LLNode<E> newNode = new LLNode<E>(element); 
+		
+		if(size == 0){
+			newNode.next = head.next;
+			newNode.prev = tail.prev;
+			head.next = newNode;
+			tail.prev = newNode;
+			
+			++size;
+			return;
+		}
+		
+		LLNode<E> traversePtr = head.next;
+		for (int i = 0; i < index; i++) {
+			traversePtr = traversePtr.next;
+		}
+		
+		newNode.next = traversePtr;
+		newNode.prev = traversePtr.prev;
+		traversePtr.prev.next = newNode;
+		traversePtr.prev = newNode;
+		
+		++size;
+		return;
 	}
 
 
@@ -87,7 +116,7 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public int size() 
 	{
 		// TODO: Implement this method
-		return -1;
+		return size;
 	}
 
 	/** Remove a node at the specified index and return its data element.
@@ -99,7 +128,18 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E remove(int index) 
 	{
 		// TODO: Implement this method
-		return null;
+		if(index >= size || index < 0){
+			throw new IndexOutOfBoundsException("check bounds while deletion");
+		}
+		LLNode<E> traversePtr = head.next;
+		for (int i = 0; i < index; i++) {
+			traversePtr = traversePtr.next;
+		}
+		traversePtr.prev.next = traversePtr.next;
+		traversePtr.next.prev = traversePtr.prev;
+		
+		--size;
+		return traversePtr.data;
 	}
 
 	/**
@@ -112,7 +152,19 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public E set(int index, E element) 
 	{
 		// TODO: Implement this method
-		return null;
+		if(index < 0 || index >= size){
+			throw new IndexOutOfBoundsException("Set: check bounds.");
+		}
+		if(element == null){
+			throw new NullPointerException("Set: Null insertion is not allowed");
+		}
+		LLNode<E> traversePtr = head.next;
+		for (int i = 0; i < index; i++) {
+			traversePtr = traversePtr.next;
+		}
+		E returnData = traversePtr.data;
+		traversePtr.data = element;
+		return returnData;
 	}   
 }
 
