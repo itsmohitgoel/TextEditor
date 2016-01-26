@@ -32,6 +32,10 @@ public class MyLinkedList<E> extends AbstractList<E> {
 	public boolean add(E element ) 
 	{
 		// TODO: Implement this method
+		// If element is null, then throw NPException
+		if(element == null){
+			throw new NullPointerException("Add: Null insertion is not allowed");
+		}
 		LLNode newNode = new LLNode(element);
 		
 		// If list is empty, re-adjust pointers only.
@@ -83,6 +87,11 @@ public class MyLinkedList<E> extends AbstractList<E> {
 		if(index < 0 || index > size){
 			throw new IndexOutOfBoundsException("Check Upper or Lower bounds while inserting "
 					+ "element at particular index.");
+		}
+		
+		// If element is null, then throw NPException
+		if (element == null) {
+			throw new NullPointerException("Add: Null insertion is not allowed");
 		}
 		
 		LLNode<E> newNode = new LLNode<E>(element); 

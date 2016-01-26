@@ -174,16 +174,40 @@ public class MyLinkedListTester {
 		assertEquals("Add: check last element is oorrect",(Integer)5, emptyList.get(0));
 		assertEquals("Add: check size is correct ",1, emptyList.size());
 		
+		// Test Null Insertion
+		try {
+			emptyList.add(null);
+			fail("Add: check null insertion to list");
+		} catch (NullPointerException e) {
+			
+		}
+		
 		//test shorter list,
 		assertEquals("Add: check item is added to shorter list", true, shortList.add("C"));
 		assertEquals("Add: check last element is correct", "C", shortList.get(2));
 		assertEquals("Add: check size is correct", 3, shortList.size());
+		
+		// Test Null Insertion
+		try {
+			shortList.add(null);
+			fail("Add: check null insertion to list");
+		} catch (NullPointerException e) {
+
+		}
 		
 		// test longer list,
 		for (int i = 10; i < 20; i++) {
 			assertEquals("Add: check insertion of  " + i + " element",true, longerList.add(i));
 			assertEquals("Add: check last element is correct", (Integer)i, longerList.get(i));
 			assertEquals("Add: check size is correct", (i + 1), longerList.size());
+		}
+		
+		// Test Null Insertion
+		try {
+			longerList.add(null);
+			fail("Add: check null insertion to list");
+		} catch (NullPointerException e) {
+			
 		}
 		
 	}
@@ -234,6 +258,14 @@ public class MyLinkedListTester {
 			
 		}
 		
+		// Test Null Insertion
+		try {
+			emptyList.add(0, null);
+			fail("Add: check null insertion to list");
+		} catch (NullPointerException e) {
+
+		}
+		
 		// Test short list, first contents , then out of bounds
 		shortList.add(1, "a");
 		assertEquals("check insertion in short list", "a", shortList.get(1));
@@ -250,6 +282,14 @@ public class MyLinkedListTester {
 			fail("check out of lower bounds");
 		} catch (IndexOutOfBoundsException e) {
 			
+		}
+		
+		// Test Null Insertion
+		try {
+			shortList.add(1, null);
+			fail("Add: check null insertion to list");
+		} catch (NullPointerException e) {
+
 		}
 		
 		// Test longer list, first contents, then out of bounds
@@ -269,6 +309,14 @@ public class MyLinkedListTester {
 			longerList.add(-1, 100);
 		} catch (IndexOutOfBoundsException e) {
 			
+		}
+		
+		// Test Null Insertion
+		try {
+			longerList.add(3, null);
+			fail("Add: check null insertion to list");
+		} catch (NullPointerException e) {
+
 		}
 	}
 	
