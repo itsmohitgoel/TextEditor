@@ -1,9 +1,15 @@
 package textgen;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import document.EfficientDocument;
 
 /** 
  * An implementation of the MTG interface that uses a list of lists.
@@ -11,18 +17,21 @@ import java.util.Random;
  */
 public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 
-	// The list of words with their next words
-	private List<ListNode> wordList; 
+	// The list of distinct words with their possible next words
+	private List<WordNode> wordList; 
 	
 	// The starting "word"
 	private String starter;
+	
+	// The previous "word"
+	private WordNode prevWord;
 	
 	// The random number generator
 	private Random rnGenerator;
 	
 	public MarkovTextGeneratorLoL(Random generator)
 	{
-		wordList = new LinkedList<ListNode>();
+		wordList = new LinkedList<WordNode>();
 		starter = "";
 		rnGenerator = generator;
 	}
@@ -33,6 +42,31 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	public void train(String sourceText)
 	{
 		// TODO: Implement this method
+		List<String> availaibleWords = getAllWords(sourceText);
+		if(availaibleWords == null || availaibleWords.isEmpty()){
+			return;
+		}
+		
+		starter = availaibleWords.get(0);
+		prevWord = new WordNode(starter);
+		String currentWordString = null;
+		
+		// For each word 'currentWord' in source text starting at second word
+		for (int i = 1; i < availaibleWords.size(); i++) {
+			currentWordString = availaibleWords.get(i);
+			if (isWordPresent(prevWord)) {
+				prevWord.addNextWord(currentWordString);
+			} else {
+				wordList.add(prevWord);
+				prevWord.addNextWord(currentWordString);
+			}
+			
+			// Set the prevWord to be the current wordhttp://marketplace.eclipse.org/marketplace-client-intro?mpc_install=27025
+			prevWord = new WordNode(currentWordString);
+		}
+		
+		prevWord.addNextWord(starter);
+		wordList.add(prevWord);
 	}
 	
 	/** 
@@ -50,7 +84,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	public String toString()
 	{
 		String toReturn = "";
-		for (ListNode n : wordList)
+		for (WordNode n : wordList)
 		{
 			toReturn += n.toString();
 		}
@@ -66,6 +100,66 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	
 	// TODO: Add any private helper methods you need here.
 	
+	private List<String> getAllWords(String text){
+		List<String> tokens = getTokens("[!?.]+|[a-zA-Z]+", text);
+		if(tokens.isEmpty() || tokens == null){
+			return null;
+		}
+		List<String> allWordsList = new ArrayList<>();
+		
+		for (String string : tokens) {
+			if(isWord(string)){
+				allWordsList.add(string);
+			}
+		}
+		
+		return allWordsList;
+	}
+	
+	/** Returns the tokens that match the regex pattern from the document 
+	 * text string.
+	 * @param pattern A regular expression string specifying the 
+	 *   token pattern desired
+	 * @return A List of tokens from the document text that match the regex 
+	 *   pattern
+	 */
+	private List<String> getTokens(String pattern, String text)
+	{
+		ArrayList<String> tokens = new ArrayList<String>();
+		Pattern tokSplitter = Pattern.compile(pattern);
+		Matcher m = tokSplitter.matcher(text);
+		
+		while (m.find()) {
+			tokens.add(m.group());
+		}
+		
+		return tokens;
+	}
+	
+
+	/** Return true if this string is a word (as opposed to punctuation)
+	 * @param tok The string to check
+	 * @return true if tok is a word, false otherwise. */
+	private boolean isWord(String tok)
+	{
+		return !(tok.indexOf("!") >=0 || tok.indexOf(".") >=0 || tok.indexOf("?")>=0);
+	}
+	
+	private boolean isWordPresent(WordNode word){
+		if(wordList.isEmpty() || wordList == null){
+			return false;
+		}
+		
+		for (int i = 0; i < wordList.size(); i++) {
+			WordNode wordNode = wordList.get(i);
+			if(wordNode.getWord().equals(word.getWord())){
+				prevWord = wordNode;
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 	/**
 	 * This is a minimal set of tests.  Note that it can be difficult
@@ -77,6 +171,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		// feed the generator a fixed random value for repeatable behavior
 		MarkovTextGeneratorLoL gen = new MarkovTextGeneratorLoL(new Random(42));
 		String textString = "Hello.  Hello there.  This is a test.  Hello there.  Hello Bob.  Test again.";
+//		String textString = "hi there hi Leo";
 		System.out.println(textString);
 		gen.train(textString);
 		System.out.println(gen);
@@ -115,7 +210,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 
 /** Links a word to the next words in the list 
  * You should use this class in your implementation. */
-class ListNode
+class WordNode
 {
     // The word that is linking to the next words
 	private String word;
@@ -123,7 +218,7 @@ class ListNode
 	// The next words that could follow it
 	private List<String> nextWords;
 	
-	ListNode(String word)
+	WordNode(String word)
 	{
 		this.word = word;
 		nextWords = new LinkedList<String>();
