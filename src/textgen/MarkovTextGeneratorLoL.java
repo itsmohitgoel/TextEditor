@@ -75,7 +75,21 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	@Override
 	public String generateText(int numWords) {
 	    // TODO: Implement this method
-		return null;
+		
+		String currentWord = starter;
+		StringBuilder output = new StringBuilder();
+		output.append(currentWord);
+		while(numWords > 0){
+			WordNode wordNode = findWordNode(currentWord);
+//			Random randomGenerator = new Random();
+			String nextword = wordNode.getRandomNextWord(rnGenerator);
+			
+			output.append(" ").append(nextword);
+			currentWord = nextword;
+			
+			--numWords;
+		}
+		return output.toString();
 	}
 	
 	
@@ -100,6 +114,11 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	
 	// TODO: Add any private helper methods you need here.
 	
+	/** Return list of strings, representing each word in the source text
+	 * , duplicate words should be allowed
+	 * @param text
+	 * @return
+	 */
 	private List<String> getAllWords(String text){
 		List<String> tokens = getTokens("[!?.]+|[a-zA-Z]+", text);
 		if(tokens.isEmpty() || tokens == null){
@@ -139,7 +158,7 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 
 	/** Return true if this string is a word (as opposed to punctuation)
 	 * @param tok The string to check
-	 * @return true if tok is a word, false otherwise. */
+	 * @return true if token is a word, false otherwise. */
 	private boolean isWord(String tok)
 	{
 		return !(tok.indexOf("!") >=0 || tok.indexOf(".") >=0 || tok.indexOf("?")>=0);
@@ -160,6 +179,20 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		return false;
 	}
 	
+	/** Find the String as node in wordList of WordNode objects
+	 * @param String
+	 * @return WordNode reference if present, null otherwise.
+	 */
+	private WordNode findWordNode(String wordString){
+		for (int i = 0; i < wordList.size(); i++) {
+			WordNode tempWord = wordList.get(i);
+			if(tempWord.getWord().equals(wordString)){
+				return tempWord;
+			}
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * This is a minimal set of tests.  Note that it can be difficult
@@ -170,12 +203,12 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	{
 		// feed the generator a fixed random value for repeatable behavior
 		MarkovTextGeneratorLoL gen = new MarkovTextGeneratorLoL(new Random(42));
-		String textString = "Hello.  Hello there.  This is a test.  Hello there.  Hello Bob.  Test again.";
-//		String textString = "hi there hi Leo";
+//		String textString = "Hello.  Hello there.  This is a test.  Hello there.  Hello Bob.  Test again.";
+		String textString = "hi there hi Leo";
 		System.out.println(textString);
 		gen.train(textString);
 		System.out.println(gen);
-		System.out.println(gen.generateText(20));
+		System.out.println("Yo Yo text: " +gen.generateText(20));
 		String textString2 = "You say yes, I say no, "+
 				"You say stop, and I say go, go, go, "+
 				"Oh no. You say goodbye and I say hello, hello, hello, "+
@@ -239,7 +272,9 @@ class WordNode
 		// TODO: Implement this method
 	    // The random number generator should be passed from 
 	    // the MarkovTextGeneratorLoL class
-	    return null;
+		int nextWordIndex = generator.nextInt(nextWords.size());
+		
+	    return nextWords.get(nextWordIndex);
 	}
 
 	public String toString()
