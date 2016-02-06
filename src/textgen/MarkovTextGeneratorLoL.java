@@ -47,18 +47,18 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 			wordList = new LinkedList<>();
 		}
 		
-		String[] availaibleWords = getAllWords(sourceText);
-		if(availaibleWords == null || availaibleWords.length == 0){
+		List<String> availaibleWords = getAllWords(sourceText);
+		if(availaibleWords == null || availaibleWords.isEmpty()){
 			return;
 		}
 		
-		starter = availaibleWords[0];
+		starter = availaibleWords.get(0);
 		prevWord = new ListNode(starter);
 		String currentWordString = null;
 		
 		// For each word 'currentWord' in source text starting at second word
-		for (int i = 1; i < availaibleWords.length; i++) {
-			currentWordString = availaibleWords[i];
+		for (int i = 1; i < availaibleWords.size(); i++) {
+			currentWordString = availaibleWords.get(i);
 			if (isWordPresent(prevWord)) {
 				prevWord.addNextWord(currentWordString);
 			} else {
@@ -92,12 +92,11 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		}
 		
 		String currentWord = starter;
-		StringBuilder output = new StringBuilder(currentWord);
+		StringBuilder output = new StringBuilder();
 		output.append(currentWord);
 		--numWords;
 		while(numWords > 0){
 			ListNode wordNode = findWordNode(currentWord);
-//			Random randomGenerator = new Random();
 			String nextword = wordNode.getRandomNextWord(rnGenerator);
 			
 			output.append(" ").append(nextword);
@@ -126,11 +125,11 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	public void retrain(String sourceText)
 	{
 		// TODO: Implement this method.
-//		if(sourceText.equals("")){
-//			starter = "";
-//			wordList = new LinkedList<>();
-//			return;
-//		}
+		if(sourceText.equals("")){
+			starter = "";
+			wordList = new LinkedList<>();
+			return;
+		}
 		wordList = new LinkedList<>();
 		starter = "";
 		train(sourceText);
@@ -143,8 +142,8 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 	 * @param text
 	 * @return
 	 */
-	private String[] getAllWords(String text){
-		/*List<String> tokens = getTokens("[!?]+|[a-zA-Z,']+|[a-zA-Z,']+.", text);
+	private List<String> getAllWords(String text){
+		List<String> tokens = getTokens("[^\\s]+", text);
 		if(tokens.isEmpty() || tokens == null){
 			return null;
 		}
@@ -154,8 +153,8 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 //			if(isWord(string)){
 				allWordsList.add(string);
 //			}
-		}*/
-		String[] allWordsList = text.split("[\\s]+");
+		}
+		
 		return allWordsList;
 	}
 	
@@ -179,15 +178,6 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		return tokens;
 	}
 	
-
-	/** Return true if this string is a word (as opposed to punctuation)
-	 * @param tok The string to check
-	 * @return true if token is a word, false otherwise. */
-	private boolean isWord(String tok)
-	{
-		return !(tok.indexOf("!") >=0 || tok.indexOf(".") >=0 || tok.indexOf("?")>=0);
-	}
-	
 	private boolean isWordPresent(ListNode word){
 		if(wordList.isEmpty() || wordList == null){
 			return false;
@@ -203,9 +193,9 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 		return false;
 	}
 	
-	/** Find the String as node in wordList of WordNode objects
+	/** Find the String as node in wordList of ListNode objects
 	 * @param String
-	 * @return WordNode reference if present, null otherwise.
+	 * @return ListNode reference if present, null otherwise.
 	 */
 	private ListNode findWordNode(String wordString){
 		for (int i = 0; i < wordList.size(); i++) {
@@ -259,7 +249,6 @@ public class MarkovTextGeneratorLoL implements MarkovTextGenerator {
 				"I don't know why you say goodbye, I say hello, hello, hello,";
 		System.out.println(textString2);
 		gen.retrain(textString2);
-//		gen.retrain("   ");
 		System.out.println(gen);
 		System.out.println("Yo Yo Text2: " +gen.generateText(20));
 	}
