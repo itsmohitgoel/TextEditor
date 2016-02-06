@@ -38,7 +38,7 @@ public class MarkovTextGeneratorLoLTester {
 			"I don't know why you say goodbye, I say hello, hello, hello,";
 	private Random rnGenerator;
 	private MarkovTextGeneratorLoL mtGen1;
-	private WordNode shortWordNode;
+	private ListNode shortWordNode;
 	
 	
 	/**
@@ -50,7 +50,7 @@ public class MarkovTextGeneratorLoLTester {
 		
 		mtGen1 = new MarkovTextGeneratorLoL(rnGenerator);
 		
-		shortWordNode = new WordNode("hi");
+		shortWordNode = new ListNode("hi");
 		shortWordNode.addNextWord("hello");
 		shortWordNode.addNextWord("brother");
 		shortWordNode.addNextWord("hello.");
