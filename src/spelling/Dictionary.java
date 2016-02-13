@@ -4,7 +4,7 @@
 package spelling;
 
 /**
- * @author Christine
+ * @author Mohit Goel
  *
  */
 public interface Dictionary {
